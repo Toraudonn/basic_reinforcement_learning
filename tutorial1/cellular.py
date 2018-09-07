@@ -51,7 +51,7 @@ class Agent:
     def goInDirection(self, dir):
         target = self.cell.neighbour[dir]
         if getattr(target, 'wall', False):
-            #print "hit a wall"
+            #print('hit a wall')
             return False
         self.cell = target
         return True
@@ -99,11 +99,12 @@ class World:
         self.display = makeDisplay(self)
         self.directions = directions
         if filename is not None:
-            data = file(filename).readlines()
-            if height is None:
-                height = len(data)
-            if width is None:
-                width = max([len(x.rstrip()) for x in data])
+            with open(filename) as f:
+                data = f.readlines()
+                if height is None:
+                    height = len(data)
+                if width is None:
+                    width = max([len(x.rstrip()) for x in data])
         if width is None:
             width = 20
         if height is None:
@@ -168,7 +169,7 @@ class World:
         if not hasattr(self.Cell, 'load'):
             return
         if isinstance(f, type('')):
-            f = file(f)
+            f = open(f)
         lines = f.readlines()
         lines = [x.rstrip() for x in lines]
         fh = len(lines)
@@ -177,12 +178,12 @@ class World:
             fh = self.height
             starty = 0
         else:
-            starty = (self.height - fh) / 2
+            starty = (self.height - fh) // 2
         if fw > self.width:
             fw = self.width
             startx = 0
         else:
-            startx = (self.width - fw) / 2
+            startx = (self.width - fw) // 2
 
         self.reset()
         for j in range(fh):
@@ -390,8 +391,8 @@ class TkinterDisplay:
         if hexgrid:
             iw += self.size / 2
 
-        f = file('temp.ppm', 'wb')
-        f.write('P6\n%d %d\n255\n' % (iw, ih))
+        with open('temp.ppm', 'wb') as f:
+            f.write('P6\n%d %d\n255\n' % (iw, ih))
 
         odd = False
         for row in self.world.grid:
@@ -518,7 +519,7 @@ class PygameDisplay:
                     try:
                         self.screen.fill(c, (sx, sy, self.size, self.size))
                     except TypeError:
-                        print 'Error: invalid colour:', c
+                        print('Error: invalid colour:', c)
                 sx += self.size
             odd = not odd
             sy += self.size

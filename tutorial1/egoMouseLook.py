@@ -1,6 +1,7 @@
 import time
 import random
 import shelve
+from importlib import reload
 
 import pdb
 
@@ -103,7 +104,7 @@ class Mouse(cellular.Agent):
 
         # Choose a new action and execute it
         state = self.calcState()
-        print(state)
+        #print(state)
         action = self.ai.chooseAction(state)
         self.lastState = state
         self.lastAction = action
@@ -150,8 +151,7 @@ while world.age < endAge:
                             epsilonm*(world.age - epsilonx[0]) + epsilony[0])'''
 
     if world.age % 10000 == 0:
-        print "{:d}, e: {:0.2f}, W: {:d}, L: {:d}"\
-            .format(world.age, mouse.ai.epsilon, mouse.fed, mouse.eaten)
+        print(f'{world.age}, e: {mouse.ai.epsilon}, W: {mouse.fed}, L: {mouse.eaten}')
         mouse.eaten = 0
         mouse.fed = 0
 
@@ -159,8 +159,8 @@ world.display.activate(size=30)
 world.display.delay = 1
 while 1:
     world.update(mouse.fed, mouse.eaten)
-    print len(mouse.ai.q) # print the amount of state/action, reward 
-                          # elements stored
+    print(len(mouse.ai.q))  # print the amount of state/action, reward 
+                            # elements stored
     import sys
     bytes = sys.getsizeof(mouse.ai.q)
-    print "Bytes: {:d} ({:d} KB)".format(bytes, bytes/1024)
+    print("Bytes: {} ({} KB)".format(bytes, bytes/1024))
